@@ -28,6 +28,13 @@
 (def by-client-id (atom {}))
 (def by-name (atom {}))
 
+(defn get-client-user
+  [client-id]
+  (let [session (by-client-id client-id)]
+    (if session
+      (get-user (:name session))
+      nil)))
+
 (defn close-session
   [session]
   (swap! by-client-id disj (:client-id session))

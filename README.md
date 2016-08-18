@@ -7,3 +7,5 @@ To run this program, enter the command "boot dev" from the welcome repository di
 and then point your browser to [http://localhost:8000/](http://localhost:8000/).
 
 Account names (Sam, Fred) have the same password, but lowercase. I.E. "sam" and "fred".
+
+See the [wiki](https://github.com/tiples/welcome/wiki) for more information.

@@ -41,7 +41,7 @@
   []
   (comp
     (serve
-      :handler 'app.contacts/app
+      :handler 'welcome.core/handler
       :reload true
       :port 8000
       :httpkit true

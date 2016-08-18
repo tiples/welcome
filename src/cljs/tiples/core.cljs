@@ -1,4 +1,4 @@
-(ns app.websocket
+(ns tiples.core
   (:require
    [taoensso.sente  :as sente]
    ))

@@ -1,4 +1,4 @@
-(ns app.handler
+(ns tiples.core
   (:require [compojure.core :as c]
             [compojure.route :as route]
             [ring.middleware.defaults :as d]

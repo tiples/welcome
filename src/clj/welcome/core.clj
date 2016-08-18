@@ -1,7 +1,7 @@
-(ns app.contacts
-  (:require [app.handler :as handler]))
+(ns welcome.core
+  (:require [tiples.core :as tiples]))
 
-(def app handler/routes)
+(def handler tiples/routes)
 
 (def my-contacts
   (atom #{{:first "Ben" :last "Bitdiddle" :email "benb@mit.edu"}
@@ -11,18 +11,18 @@
           {:first "Cy" :middle-initial "D" :last "Effect" :email "bugs@mit.edu"}
           {:first "Lem" :middle-initial "E" :last "Tweakit" :email "morebugs@mit.edu"}}))
 
-(defmethod handler/event-msg-handler :contacts/get-contacts
+(defmethod tiples/event-msg-handler :contacts/get-contacts
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
-  (handler/chsk-send! (:client-id ev-msg) [(:resp-id ?data) @my-contacts]))
+  (tiples/chsk-send! (:client-id ev-msg) [(:resp-id ?data) @my-contacts]))
 
-(defmethod handler/event-msg-handler :contacts/delete
+(defmethod tiples/event-msg-handler :contacts/delete
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
   (let [contact (:contact ?data)]
     (swap! my-contacts disj contact)
-    (handler/broadcast :contacts/deleted contact)))
+    (tiples/broadcast :contacts/deleted contact)))
 
-(defmethod handler/event-msg-handler :contacts/add
+(defmethod tiples/event-msg-handler :contacts/add
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
   (let [contact (:contact ?data)]
     (swap! my-contacts conj contact)
-    (handler/broadcast :contacts/added contact)))
+    (tiples/broadcast :contacts/added contact)))

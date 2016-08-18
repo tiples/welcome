@@ -1,18 +1,18 @@
 (page "index.html"
       (:require [clojure.string :as string]
-                [app.websocket :as ws]))
+                [tiples.core :as tiples]))
 
 (def my-contacts
   (cell #{}))
 
 (defn get-state []
-      (ws/chsk-send! [:contacts/get-contacts {:resp-id :contacts/initialize}]))
+      (tiples/chsk-send! [:contacts/get-contacts {:resp-id :contacts/initialize}]))
 
 (defn delete-contact [contact]
-      (ws/chsk-send! [:contacts/delete {:contact contact}]))
+      (tiples/chsk-send! [:contacts/delete {:contact contact}]))
 
 (defn add-contact [contact]
-      (ws/chsk-send! [:contacts/add {:contact contact}]))
+      (tiples/chsk-send! [:contacts/add {:contact contact}]))
 
 (defn middle-name [{:keys [middle middle-initial]}]
       (cond
@@ -52,21 +52,21 @@
                   label)
                 (pre (cell= (pr-str parsed))))))
 
-(defmethod ws/chsk-recv :contacts/initialize
+(defmethod tiples/chsk-recv :contacts/initialize
            [id contacts]
            (reset! my-contacts contacts))
 
-(defmethod ws/chsk-recv :contacts/deleted
+(defmethod tiples/chsk-recv :contacts/deleted
            [id contact]
            (swap! my-contacts disj contact))
 
-(defmethod ws/chsk-recv :contacts/added
+(defmethod tiples/chsk-recv :contacts/added
            [id contact]
            (swap! my-contacts conj contact))
 
-(ws/on-open get-state)
+(tiples/on-open get-state)
 
-(ws/start!)
+(tiples/start!)
 
 (html
   (head

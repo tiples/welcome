@@ -1,7 +1,7 @@
 # tiples/welcome
-A basic tiples application.
+A basic application for Clojure Tiples.
 
-Welcome will let you login as either Sam or Fred and then displays "Welcome {Sam|Fred}".
+The welcome program will let you login as either Sam or Fred and then displays "Welcome {Sam|Fred}".
 
 To run this program, enter the command "boot dev" from the welcome repository directory on your computer
 and then point your browser to [http://localhost:8000/](http://localhost:8000/).

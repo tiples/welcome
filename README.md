@@ -1,4 +1,4 @@
-# welcome
+# tiples/welcome
 A basic tiples application.
 
 Welcome will let you login as either Sam or Fred and then displays "Welcome {Sam|Fred}".

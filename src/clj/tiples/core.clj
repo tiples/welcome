@@ -23,7 +23,7 @@
   (def connected-uids                connected-uids) ; Watchable, read-only atom
   )
 
-(defn broadcast [msg-id data]
+(defn broadcast! [msg-id data]
   (let [uids (:any @connected-uids)
         msg [msg-id data]]
     (doseq [uid uids]

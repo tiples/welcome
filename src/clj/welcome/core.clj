@@ -20,10 +20,10 @@
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
   (let [contact (:contact ?data)]
     (swap! my-contacts disj contact)
-    (tiples/broadcast :contacts/deleted contact)))
+    (tiples/broadcast! :contacts/deleted contact)))
 
 (defmethod tiples/event-msg-handler :contacts/add
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
   (let [contact (:contact ?data)]
     (swap! my-contacts conj contact)
-    (tiples/broadcast :contacts/added contact)))
+    (tiples/broadcast! :contacts/added contact)))

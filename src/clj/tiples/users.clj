@@ -40,10 +40,16 @@
   (swap! by-client-id disj (:client-id session))
   (swap! by-name disj (:name session)))
 
+(defn broadcast! [msg-id data]
+  (let [uids (keys @by-client-id)
+        msg [msg-id data]]
+    (doseq [uid uids]
+      (tiples/chsk-send! uid msg))))
+
 (defn logout
   [session]
   (close-session session)
-  (tiples/chsk-send! (:client-id session) [:users/logged-in false]))
+  (broadcast! (:client-id session) [:users/logged-in (:name session) false]))
 
 (defmethod tiples/event-msg-handler :users/logout
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
@@ -69,7 +75,7 @@
   (let [session (->session client-id name)]
     (swap! by-client-id assoc client-id session)
     (swap! by-name assoc name session))
-  (tiples/chsk-send! client-id [:users/logged-in true]))
+  (broadcast! client-id [:users/logged-in name true]))
 
 (defmethod tiples/event-msg-handler :users/login
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]

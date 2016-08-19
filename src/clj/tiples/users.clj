@@ -25,7 +25,7 @@
       (= password (:password user))
       false)))
 
-(defrecord session [client-id name])
+(defrecord session [client-id name capabilities])
 
 (def by-client-id (atom {}))
 (def by-name (atom {}))
@@ -37,22 +37,22 @@
       (get-user (:name session))
       nil)))
 
-(defn close-session
-  [session]
-  (swap! by-client-id disj (:client-id session))
-  (swap! by-name disj (:name session)))
-
 (defn broadcast! [msg-id data]
   (let [uids (keys @by-client-id)
         msg [msg-id data]]
     (doseq [uid uids]
       (tiples/chsk-send! uid msg))))
 
+(defn close-session
+  [session]
+  (swap! by-client-id disj (:client-id session))
+  (swap! by-name disj (:name session))
+  (broadcast! :users/logged-in-notice [(:name session) #{}]))
+
 (defn logout
   [session]
-  (close-session session)
   (tiples/chsk-send! (:client-id session) [:users/logged-in nil])
-  (broadcast! :users/logged-in-notice [(:name session) false]))
+  (close-session session))
 
 (defmethod tiples/event-msg-handler :users/logout
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
@@ -71,23 +71,25 @@
   )
 
 (defn add-session
-  [client-id name]
+  [client-id name capabilities]
   (let [session (@by-client-id client-id)]
     (if session
       (logout session)))
-  (let [session (->session client-id name)
+  (let [session (->session client-id name capabilities)
         user (get-user name)
-        user-data (:user-data user)]
+        select-user-data (select-keys (:user-data user) capabilities)
+        select-common-data (select-keys @common-data capabilities)]
     (swap! by-client-id assoc client-id session)
     (swap! by-name assoc name session)
-    (tiples/chsk-send! :client-id [:users/logged-in [@common-data user-data]]))
-  (broadcast! :users/logged-in-notice [name true]))
+    (tiples/chsk-send! :client-id [:users/logged-in [select-common-data select-user-data]]))
+  (broadcast! :users/logged-in-notice [name capabilities]))
 
 (defmethod tiples/event-msg-handler :users/login
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
   (let [client-id (event 1)
         name (:name ?data)
-        password (:password ?data)]
+        password (:password ?data)
+        capabilities (:capabilities ?data)]
     (if (validate-user name password)
-      (add-session client-id name)
+      (add-session client-id name capabilities)
       (tiples/chsk-send! client-id [:users/login-error]))))

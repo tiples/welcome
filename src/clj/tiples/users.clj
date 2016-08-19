@@ -1,16 +1,18 @@
 (ns tiples.users
   (:require [tiples.core :as tiples]))
 
-(defrecord user [name password])
+(def common-data (atom {}))
+
+(defrecord user [name password user-data])
 
 (def users (atom (sorted-map)))
 
 (defn add-user
-  [name password]
-  (swap! users assoc name (->user name password)))
+  [name password user-data]
+  (swap! users assoc name (->user name password user-data)))
 
-(add-user "Fred" "fred")
-(add-user "Sam" "sam")
+(add-user "Fred" "fred" {})
+(add-user "Sam" "sam" {})
 
 (defn get-user
   [name]
@@ -49,7 +51,8 @@
 (defn logout
   [session]
   (close-session session)
-  (broadcast! (:client-id session) [:users/logged-in (:name session) false]))
+  (tiples/chsk-send! (:client-id session) [:users/logged-in nil])
+  (broadcast! :users/logged-in-notice [(:name session) false]))
 
 (defmethod tiples/event-msg-handler :users/logout
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
@@ -72,10 +75,13 @@
   (let [session (@by-client-id client-id)]
     (if session
       (logout session)))
-  (let [session (->session client-id name)]
+  (let [session (->session client-id name)
+        user (get-user name)
+        user-data (:user-data user)]
     (swap! by-client-id assoc client-id session)
-    (swap! by-name assoc name session))
-  (broadcast! client-id [:users/logged-in name true]))
+    (swap! by-name assoc name session)
+    (tiples/chsk-send! :client-id [:users/logged-in [@common-data user-data]]))
+  (broadcast! :users/logged-in-notice [name true]))
 
 (defmethod tiples/event-msg-handler :users/login
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]

@@ -6,22 +6,22 @@
 (defc started false)
 (defc common-data nil)
 (defc user-data nil)
+(defc user "")
 
 (defc= show-login? (and started (not user-data)))
 
-(def login! (fn [user pass1 pass2]
-                (.log js/console "ribit")))
+(def login! (fn [user pass1]
+                (tiples/chsk-send! [:users/login {:name user :password pass1}])))
 
 (defn login-div []
       (div
         :id "login-pane"
         :css {:display "none"}
         :toggle show-login?
-        (let [user (cell "")
-              pass (cell "")
+        (let [pass (cell "")
               pass2 (cell "")]
              (form
-               :submit #(login! @user @pass @pass2)
+               :submit #(login! @user @pass)
                (table
                  (tr
                    (td (label "Username "))
@@ -35,8 +35,9 @@
                               :value pass
                               :change #(reset! pass @%))))
                  (tr
-                   (td (button :type "submit" "login"))
-                   (td ""))
+                   (td "")
+                   (td :style "text-align:right" (button :type "submit" "login"))
+                   )
                  )
                )
              )

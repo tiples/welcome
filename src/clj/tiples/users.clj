@@ -53,7 +53,7 @@
 
 (defmethod tiples/event-msg-handler :users/logout
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
-  (let [client-id (event 1)
+  (let [client-id (:client-id ev-msg)
         session (@by-client-id client-id)]
     (if session
       (logout session)))
@@ -61,7 +61,7 @@
 
 (defmethod tiples/event-msg-handler :chsk/uidport-close
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
-  (let [client-id (event 1)
+  (let [client-id (:client-id ev-msg)
         session (@by-client-id client-id)]
     (if session
       (close-session session)))
@@ -84,10 +84,11 @@
 
 (defmethod tiples/event-msg-handler :users/login
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
-  (let [client-id (event 1)
+  (let [client-id (:client-id ev-msg)
         name (:name ?data)
-        password (:password ?data)
-        capabilities (:capabilities ?data)]
+        password (:password ?data)]
     (if (validate-user name password)
-      (add-session client-id name capabilities)
-      (tiples/chsk-send! client-id [:users/login-error]))))
+      (add-session client-id name)
+      (do
+        (println "sending login error " client-id)
+        (tiples/chsk-send! client-id [:users/login-error nil])))))

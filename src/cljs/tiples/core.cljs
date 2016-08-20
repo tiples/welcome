@@ -42,15 +42,22 @@
 
 (defmulti chsk-recv (fn [id ?data] id))
 
+(defmethod chsk-recv :default ; Fallback
+           [id ?data]
+           (.log js/console (str "Unhandled message: " id))
+           )
+
 (defmethod event-msg-handler :chsk/recv
            [{:as ev-msg :keys [?data]}]
+           (.log js/console (str "incoming " ?data))
            (chsk-recv (?data 0) (?data 1)))
 
 (def router_ (atom nil))
 (defn  stop-router! [] (when-let [stop-f @router_] (stop-f)))
 (defn start-router! []
       (stop-router!)
-      (reset! router_ (sente/start-chsk-router! ch-chsk event-msg-handler*)))
+      (reset! router_ (sente/start-chsk-router! ch-chsk event-msg-handler*))
+      (.log js/console "started routing"))
 
 (defn on-open [f] (reset! opening f))
 

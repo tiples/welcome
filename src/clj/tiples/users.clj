@@ -44,7 +44,7 @@
   [session]
   (swap! by-client-id disj (:client-id session))
   (swap! by-name disj (:name session))
-  (broadcast! :users/logged-in-notice [(:name session) #{}]))
+  (broadcast! :users/logged-in-notice [(:name session) nil]))
 
 (defn logout
   [session]

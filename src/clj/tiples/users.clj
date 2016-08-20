@@ -11,9 +11,6 @@
   [name password user-data]
   (swap! users assoc name (->user name password user-data)))
 
-(add-user "Fred" "fred" {})
-(add-user "Sam" "sam" {})
-
 (defn get-user
   [name]
   (@users name))
@@ -71,18 +68,19 @@
   )
 
 (defn add-session
-  [client-id name capabilities]
+  [client-id name]
   (let [session (@by-client-id client-id)]
     (if session
       (logout session)))
-  (let [session (->session client-id name capabilities)
-        user (get-user name)
-        select-user-data (select-keys (:user-data user) capabilities)
+  (let [user (get-user name)
+        user-data (:user-data user)
+        capabilities (keys user-data)
+        session (->session client-id name capabilities)
         select-common-data (select-keys @common-data capabilities)]
     (swap! by-client-id assoc client-id session)
     (swap! by-name assoc name session)
-    (tiples/chsk-send! :client-id [:users/logged-in [select-common-data select-user-data]]))
-  (broadcast! :users/logged-in-notice [name capabilities]))
+    (tiples/chsk-send! :client-id [:users/logged-in [select-common-data user-data]])
+    (broadcast! :users/logged-in-notice [name capabilities])))
 
 (defmethod tiples/event-msg-handler :users/login
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]

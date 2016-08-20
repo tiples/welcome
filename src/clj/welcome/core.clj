@@ -3,3 +3,6 @@
             [tiples.users :as users]))
 
 (def handler tiples/routes)
+
+(users/add-user "Fred" "fred" {:welcome {}})
+(users/add-user "Sam" "sam" {:welcome {}})

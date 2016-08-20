@@ -49,6 +49,7 @@
 
 (defn logout
   [session]
+  (println :logout (:client-id session))
   (tiples/chsk-send! (:client-id session) [:users/logged-in nil])
   (close-session session))
 
@@ -71,6 +72,9 @@
 (defn add-session
   [client-id name]
   (let [session (@by-client-id client-id)]
+    (if session
+      (logout session)))
+  (let [session (@by-name name)]
     (if session
       (logout session)))
   (let [user (get-user name)

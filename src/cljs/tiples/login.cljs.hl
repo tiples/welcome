@@ -17,9 +17,19 @@
 
 (defmethod tiples/chsk-recv :users/login-error
            [id ?data]
-           (reset! error true)
-           (.log js/console @error)
-           )
+           (reset! error true))
+
+(defmethod tiples/chsk-recv :users/logged-in
+           [id ?data]
+             (if (nil? ?data)
+               (dosync
+                 (.log js/console "logoff")
+                 (reset! user-data nil)
+                 (reset! common-data nil))
+               (dosync
+                 (.log js/console "logon")
+                 (reset! user-data (?data 1))
+                 (reset! common-data (?data 0)))))
 
 (defn login-div []
       (div

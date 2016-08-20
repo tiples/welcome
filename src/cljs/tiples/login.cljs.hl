@@ -1,0 +1,44 @@
+(ns tiples.login
+  (:require-macros
+    [javelin.core :refer [defc defc=]])
+  (:require [tiples.core :as tiples]))
+
+(defc started false)
+(defc common-data nil)
+(defc user-data nil)
+
+(defc= show-login? (and started (not user-data)))
+
+(def login! (fn [user pass1 pass2]
+                (.log js/console "ribit")))
+
+(defn login-div []
+      (div
+        :id "login-pane"
+        :css {:display "none"}
+        :toggle show-login?
+        (let [user (cell "")
+              pass (cell "")
+              pass2 (cell "")]
+             (form
+               :submit #(login! @user @pass @pass2)
+               (table
+                 (tr
+                   (td (label "Username "))
+                   (td (input :type "text"
+                              :autofocus "autofocus"
+                              :value user
+                              :change #(reset! user @%))))
+                 (tr
+                   (td (label "Password "))
+                   (td (input :type "password"
+                              :value pass
+                              :change #(reset! pass @%))))
+                 (tr
+                   (td (button :type "submit" "login"))
+                   (td ""))
+                 )
+               )
+             )
+        )
+      )

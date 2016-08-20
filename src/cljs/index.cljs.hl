@@ -1,6 +1,14 @@
 (page "index.html"
-      (:require [clojure.string :as string]
-                [tiples.core :as tiples]))
+      (:require
+        [clojure.string :as string]
+        [tiples.core :as tiples]
+        [tiples.login :as login]))
+
+(defn opening
+      []
+      (reset! login/started true))
+
+(tiples/on-open opening)
 
 (tiples/start!)
 
@@ -8,4 +16,5 @@
   (head
     (link :rel "stylesheet" :type "text/css" :href "css/main.css"))
   (body
-    (h2 "Welcome!")))
+    (h2 "Welcome!")
+    (login/login-div)))

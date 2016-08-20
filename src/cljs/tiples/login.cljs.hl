@@ -6,13 +6,15 @@
 (defc started false)
 (defc common-data nil)
 (defc user-data nil)
-(defc user "")
+(defc user-name "")
 (def error (cell false))
 
 (defc= show-login? (and started (not user-data)))
+(defc= show-app? (and started user-data))
 
 (def login! (fn [user pass1]
                 (reset! error false)
+                (reset! user-name user)
                 (tiples/chsk-send! [:users/login {:name user :password pass1}])))
 
 (defmethod tiples/chsk-recv :users/login-error
@@ -42,7 +44,9 @@
           :id "login-pane"
           :css {:display "none"}
           :toggle show-login?
-          (let [pass (cell "")
+          (h2 "Welcome to Tiples")
+          (let [user (cell "")
+                pass (cell "")
                 pass2 (cell "")]
                (form
                  :submit #(login! @user @pass)

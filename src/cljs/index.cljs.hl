@@ -16,5 +16,8 @@
   (head
     (link :href "main.css" :rel "stylesheet"))
   (body
-    (h2 "Welcome!")
+    (div
+      :css {:display "none"}
+      :toggle login/show-app?
+      (h2 (text "Hello ~{login/user-name}.")))
     (login/login-div)))

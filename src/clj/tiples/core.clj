@@ -43,7 +43,6 @@
 (defmulti event-msg-handler :id) ; Dispatch on event-id
 ;; Wrap for logging, catching, etc.:
 (defn     event-msg-handler* [{:as ev-msg :keys [id ?data event]}]
-  (println "Event:" event)
   (event-msg-handler ev-msg)
   )
 

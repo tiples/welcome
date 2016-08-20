@@ -35,10 +35,7 @@
 (defmethod event-msg-handler :chsk/state
            [{:as ev-msg :keys [?data]}]
            (if (:open? (?data 1))
-             (@opening))
-           (comment if (= ?data {:first-open? true})
-                    (.log js/console "Channel socket successfully established!")
-                    (.log js/console (str "Channel socket state change: " ?data))))
+             (@opening)))
 
 (defmulti chsk-recv (fn [id ?data] id))
 
@@ -49,7 +46,6 @@
 
 (defmethod event-msg-handler :chsk/recv
            [{:as ev-msg :keys [?data]}]
-           (.log js/console (str "incoming " ?data))
            (chsk-recv (?data 0) (?data 1)))
 
 (def router_ (atom nil))
@@ -57,7 +53,7 @@
 (defn start-router! []
       (stop-router!)
       (reset! router_ (sente/start-chsk-router! ch-chsk event-msg-handler*))
-      (.log js/console "started routing"))
+      )
 
 (defn on-open [f] (reset! opening f))
 

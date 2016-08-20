@@ -7,39 +7,54 @@
 (defc common-data nil)
 (defc user-data nil)
 (defc user "")
+(def error (cell false))
 
 (defc= show-login? (and started (not user-data)))
 
 (def login! (fn [user pass1]
+                (reset! error false)
                 (tiples/chsk-send! [:users/login {:name user :password pass1}])))
+
+(defmethod tiples/chsk-recv :users/login-error
+           [id ?data]
+           (reset! error true)
+           (.log js/console @error)
+           )
 
 (defn login-div []
       (div
-        :id "login-pane"
-        :css {:display "none"}
-        :toggle show-login?
-        (let [pass (cell "")
-              pass2 (cell "")]
-             (form
-               :submit #(login! @user @pass)
-               (table
-                 (tr
-                   (td (label "Username "))
-                   (td (input :type "text"
-                              :autofocus "autofocus"
-                              :value user
-                              :change #(reset! user @%))))
-                 (tr
-                   (td (label "Password "))
-                   (td (input :type "password"
-                              :value pass
-                              :change #(reset! pass @%))))
-                 (tr
-                   (td "")
-                   (td :style "text-align:right" (button :type "submit" "login"))
+        (div
+          :slide-toggle error
+          :css {:display "none"}
+          (h1 "login error")
+          )
+        (div
+          :id "login-pane"
+          :css {:display "none"}
+          :toggle show-login?
+          (let [pass (cell "")
+                pass2 (cell "")]
+               (form
+                 :submit #(login! @user @pass)
+                 (table
+                   (tr
+                     (td (label "Username "))
+                     (td (input :type "text"
+                                :autofocus "autofocus"
+                                :value user
+                                :change #(reset! user @%))))
+                   (tr
+                     (td (label "Password "))
+                     (td (input :type "password"
+                                :value pass
+                                :change #(reset! pass @%))))
+                   (tr
+                     (td "")
+                     (td :style "text-align:right" (button :type "submit" "login"))
+                     )
                    )
                  )
                )
-             )
+          )
         )
       )

@@ -42,9 +42,10 @@
 
 (defn close-session
   [session]
-  (swap! by-client-id disj (:client-id session))
-  (swap! by-name disj (:name session))
-  (broadcast! :users/logged-in-notice [(:name session) nil]))
+  (swap! by-client-id dissoc (:client-id session))
+  (swap! by-name dissoc (:name session))
+  (broadcast! :users/logged-in-notice [(:name session) nil])
+  )
 
 (defn logout
   [session]
@@ -79,8 +80,13 @@
         select-common-data (select-keys @common-data capabilities)]
     (swap! by-client-id assoc client-id session)
     (swap! by-name assoc name session)
-    (tiples/chsk-send! :client-id [:users/logged-in [select-common-data user-data]])
-    (broadcast! :users/logged-in-notice [name capabilities])))
+    (tiples/chsk-send! client-id
+                       [:users/logged-in
+                        [select-common-data user-data]
+                        ]
+                       )
+    (broadcast! :users/logged-in-notice [name capabilities])
+    ))
 
 (defmethod tiples/event-msg-handler :users/login
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
@@ -90,5 +96,4 @@
     (if (validate-user name password)
       (add-session client-id name)
       (do
-        (println "sending login error " client-id)
         (tiples/chsk-send! client-id [:users/login-error nil])))))

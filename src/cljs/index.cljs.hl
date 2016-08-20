@@ -14,7 +14,7 @@
 
 (html
   (head
-    (link :rel "stylesheet" :type "text/css" :href "css/main.css"))
+    (link :href "main.css" :rel "stylesheet"))
   (body
     (h2 "Welcome!")
     (login/login-div)))

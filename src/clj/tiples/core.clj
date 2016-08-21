@@ -48,7 +48,6 @@
 
 (defmethod event-msg-handler :default ; Fallback
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
-  (println "Unhandled event:" event)
   )
 
 (defonce router_ (atom nil))

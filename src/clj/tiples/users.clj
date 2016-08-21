@@ -7,7 +7,7 @@
 
 (def users (atom (sorted-map)))
 
-(defn add-user
+(defn add-user!
   [name password user-data]
   (swap! users assoc name (->user name password user-data)))
 
@@ -49,7 +49,6 @@
 
 (defn logout
   [session]
-  (println :logout (:client-id session))
   (tiples/chsk-send! (:client-id session) [:users/logged-in nil])
   (close-session session))
 

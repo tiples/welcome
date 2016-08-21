@@ -41,7 +41,7 @@
 
 (defmethod chsk-recv :default ; Fallback
            [id ?data]
-           (.log js/console (str "Unhandled message: " id))
+           ;(.log js/console (str "Unhandled message: " id))
            )
 
 (defmethod event-msg-handler :chsk/recv

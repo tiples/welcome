@@ -17,6 +17,9 @@
                 (reset! user-name user)
                 (tiples/chsk-send! [:users/login {:name user :password pass1}])))
 
+(defn logout! []
+      (tiples/chsk-send! [:users/logout nil]))
+
 (defmethod tiples/chsk-recv :users/login-error
            [id ?data]
            (reset! error true))
@@ -25,11 +28,9 @@
            [id ?data]
              (if (nil? ?data)
                (dosync
-                 (.log js/console "logoff")
                  (reset! user-data nil)
                  (reset! common-data nil))
                (dosync
-                 (.log js/console "logon")
                  (reset! user-data (?data 1))
                  (reset! common-data (?data 0)))))
 

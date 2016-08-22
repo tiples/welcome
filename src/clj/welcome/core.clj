@@ -3,8 +3,10 @@
             [tiples.users :as users]
             [contacts.core :as contacts]))
 
-(users/add-user! "Fred" "fred" {:welcome {:full-name "Freddy Krueger"}})
-(users/add-user! "Sam" "sam" {:welcome {:full-name "Sam I Am"}})
+(users/add-user! "Fred" "fred" {:welcome {:full-name "Freddy Krueger"}
+                                :contacts {}})
+(users/add-user! "Sam" "sam" {:welcome {:full-name "Sam I Am"}
+                              :contacts {}})
 (users/add-user! "Kris" "kris" {:welcome {:full-name "Kris Kringle"}})
 
 (contacts/add-contact! {:first "Ben" :last "Bitdiddle" :email "benb@mit.edu"})

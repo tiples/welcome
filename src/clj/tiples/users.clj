@@ -34,6 +34,26 @@
       (get-user (:name session))
       nil)))
 
+(defn get-client-data
+  [capability client-id]
+  (capability (get-client-user client-id)))
+
+(defn swap-client-data!
+  [capability client-id f]
+  (let [session (by-client-id client-id)]
+    (if session
+      (let [name (:name session)]
+        (swap! users
+               (fn [us]
+                 (let [user (users name)
+                       capability-data (capability user)
+                       capability-data (if capability-data
+                                         (f capability-data)
+                                         capability-data)
+                       user (assoc user capability capability-data)]
+                   (assoc us name user)))))
+      @users)))
+
 (defn broadcast! [msg-id data]
   (let [uids (keys @by-client-id)
         msg [msg-id data]]

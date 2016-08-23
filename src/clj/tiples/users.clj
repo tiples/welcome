@@ -40,19 +40,24 @@
 
 (defn swap-client-data!
   [capability client-id f]
-  (let [session (by-client-id client-id)]
-    (if session
-      (let [name (:name session)]
-        (swap! users
-               (fn [us]
-                 (let [user (users name)
-                       capability-data (capability user)
-                       capability-data (if capability-data
-                                         (f capability-data)
-                                         capability-data)
-                       user (assoc user capability capability-data)]
-                   (assoc us name user)))))
-      @users)))
+  (try
+    (let [session (by-client-id client-id)]
+      (if session
+        (let [name (:name session)]
+          (swap! users
+                 (fn [us]
+                   (let [user (users name)
+                         capability-data (if user
+                                           (user capability)
+                                           (throw (Exception. "no such user")))
+                         capability-data (if capability-data
+                                           (f capability-data)
+                                           (throw (Exception. "unauthorized capability")))
+                         user (assoc user capability capability-data)]
+                     (assoc us name user))))
+          true)
+        (throw (Exception. "no session"))))
+    (catch Exception e false)))
 
 (defn broadcast! [msg-id data]
   (let [uids (keys @by-client-id)

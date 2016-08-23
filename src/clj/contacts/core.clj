@@ -13,17 +13,15 @@
 (defmethod tiples/event-msg-handler :contacts/delete
   [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
   (let [contact (:contact ?data)]
-    (if (not= users/users
-              (users/swap-client-data! :contacts
-                                       (:client-id ev-msg)
-                                       (fn [users] (disj users contact))))
+    (if (users/swap-client-data! :contacts
+                                 (:client-id ev-msg)
+                                 (fn [contacts] (disj contacts contact)))
       (users/broadcast! :contacts/deleted contact))))
 
   (defmethod tiples/event-msg-handler :contacts/add
     [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
     (let [contact (:contact ?data)]
-      (if (not= users/users
-                (users/swap-client-data! :contacts
-                                         (:client-id ev-msg)
-                                         (fn [users] (conj users contact))))
+      (if (users/swap-client-data! :contacts
+                                   (:client-id ev-msg)
+                                   (fn [contacts] (conj contacts contact)))
         (users/broadcast! :contacts/added contact))))

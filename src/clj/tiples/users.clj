@@ -34,9 +34,24 @@
       (get-user (:name session))
       nil)))
 
+(defn get-common-data
+  [capability]
+  (capability @common-data))
+
+(defn swap-common-data!
+  [capability f default]
+  (swap! common-data
+         (fn [cd]
+           (let [capability-data (get cd capability default)
+                 capability-data (f capability-data)]
+             (assoc cd capability capability-data)))))
+
 (defn get-client-data
   [capability client-id]
-  (capability (get-client-user client-id)))
+  (let [client-data (get-client-user client-id)]
+    (if client-data
+      (client-data capability)
+      nil)))
 
 (defn swap-client-data!
   [capability client-id f]

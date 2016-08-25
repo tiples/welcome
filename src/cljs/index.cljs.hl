@@ -19,8 +19,13 @@
     (div
       :css {:display "none"}
       :toggle login/show-app?
-      (h2 (text "Hello ~{(:full-name (:welcome login/user-data))}."))
       (form
+        (a :href "/#home" "Home")
+        " | "
+        (a :href "/#contact" "Contact us")
+        " | "
         :submit #(login/logout!)
-        (button :type "submit" "log off")))
+        (button :type "submit" "log off"))
+      (h2 (text "Hello ~{(:full-name (:welcome login/user-data))}."))
+      )
     (login/login-div)))

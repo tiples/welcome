@@ -4,6 +4,7 @@
   (:require [tiples.core :as tiples]))
 
 (defc started false)
+(defc capabilities nil)
 (defc common-data nil)
 (defc user-data nil)
 (defc user-name "")
@@ -28,11 +29,14 @@
            [id ?data]
              (if (nil? ?data)
                (dosync
-                 (reset! user-data nil)
-                 (reset! common-data nil))
+                 (reset! capabilities nil)
+                 (reset! common-data nil)
+                 (reset! user-data nil))
                (dosync
-                 (reset! user-data (?data 1))
-                 (reset! common-data (?data 0)))))
+                 (reset! capabilities (?data 0))
+                 (reset! common-data (?data 1))
+                 (reset! user-data (?data 2))
+                 )))
 
 (defn login-div []
       (div

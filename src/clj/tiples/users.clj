@@ -1,7 +1,13 @@
 (ns tiples.users
   (:require [tiples.core :as tiples]))
 
+(def capabilities (atom []))
+
 (def common-data (atom {}))
+
+(defn add-capability
+  [capability]
+  (swap! capabilities conj capability))
 
 (defrecord user [name password user-data])
 
@@ -22,7 +28,7 @@
       (= password (:password user))
       false)))
 
-(defrecord session [client-id name capabilities])
+(defrecord session [client-id name user-capabilities])
 
 (def by-client-id (atom {}))
 (def by-name (atom {}))
@@ -118,17 +124,25 @@
       (logout session)))
   (let [user (get-user name)
         user-data (:user-data user)
-        capabilities (keys user-data)
-        session (->session client-id name capabilities)
-        select-common-data (select-keys @common-data capabilities)]
+        user-capabilities (keys user-data)
+        select-capabilities (reduce
+                              (fn [r a]
+                                (if (user-data a)
+                                  (conj r a)
+                                  r))
+                              []
+                              @capabilities)
+        session (->session client-id name user-capabilities)
+        select-common-data (select-keys @common-data user-capabilities)]
+    (println :select-capabilities select-capabilities)
     (swap! by-client-id assoc client-id session)
     (swap! by-name assoc name session)
     (tiples/chsk-send! client-id
                        [:users/logged-in
-                        [select-common-data user-data]
+                        [select-capabilities select-common-data user-data]
                         ]
                        )
-    (broadcast! :users/logged-in-notice [name capabilities])
+    (broadcast! :users/logged-in-notice [name user-capabilities])
     ))
 
 (defmethod tiples/event-msg-handler :users/login

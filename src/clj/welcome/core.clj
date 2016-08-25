@@ -3,6 +3,9 @@
             [tiples.users :as users]
             [contacts.core :as contacts]))
 
+(users/add-capability :welcome)
+(users/add-capability :contacts)
+
 (users/add-user! "Fred" "fred" {:welcome {:full-name "Freddy Krueger"}
                                 :contacts {}})
 (users/add-user! "Sam" "sam" {:welcome {:full-name "Sam I Am"}

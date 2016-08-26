@@ -35,7 +35,7 @@
         :toggle (cell= (= reroute "contacts"))
         "hi!"))
 
-(defc dispatch [])
+(def dispatch (atom []))
 
 (defn add-welcome []
       (swap! dispatch conj do-welcome))
@@ -46,6 +46,8 @@
 (add-welcome)
 (add-contacts)
 
+(defelem split-kids [attr kids]
+         (div attr kids))
 
 
 
@@ -69,7 +71,8 @@
                (td (form
                      :submit #(login/logout!)
                      (button :type "submit" "log off")))))
-      (div (for-tpl [d dispatch]
+      (split-kids @dispatch)
+      #_(div (for-tpl [d dispatch]
                     (d))))
 
     (login/login-div)))

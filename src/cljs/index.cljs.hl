@@ -23,9 +23,31 @@
       []
       (reset! login/started true))
 
-(defn do-welcome
-      []
-      (h2 (text "Hello ~{(:full-name (:welcome login/user-data))}.")))
+(def do-welcome
+      (div
+        :css {:display "none"}
+        :toggle (cell= (= reroute "welcome"))
+        (h2 (text "Hello ~{(:full-name (:welcome login/user-data))}."))))
+
+(def do-contacts
+      (div
+        :css (:display "none")
+        :toggle (cell= (= reroute "contacts"))
+        "hi!"))
+
+(defc dispatch [])
+
+(defn add-welcome []
+      (swap! dispatch conj do-welcome))
+(defn add-contacts []
+      (swap! dispatch conj do-contacts))
+
+
+(add-welcome)
+(add-contacts)
+
+
+
 
 (tiples/on-open opening)
 
@@ -47,9 +69,7 @@
                (td (form
                      :submit #(login/logout!)
                      (button :type "submit" "log off")))))
-      (case-tpl reroute
-                "welcome" (do-welcome)
-                "contacts" (div "Hi!")
-                (div "Application Error!")))
+      (div (for-tpl [d dispatch]
+               d)))
 
     (login/login-div)))

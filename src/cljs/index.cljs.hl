@@ -46,9 +46,6 @@
 (add-welcome)
 (add-contacts)
 
-(defelem split-kids [attr kids]
-         (div attr kids))
-
 
 
 (tiples/on-open opening)
@@ -71,8 +68,6 @@
                (td (form
                      :submit #(login/logout!)
                      (button :type "submit" "log off")))))
-      (split-kids @dispatch)
-      #_(div (for-tpl [d dispatch]
-                    (d))))
+      (div @dispatch))
 
     (login/login-div)))

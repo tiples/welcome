@@ -47,8 +47,9 @@
                (td (form
                      :submit #(login/logout!)
                      (button :type "submit" "log off")))))
-      (case-tpl route
-        "#welcome" (do-welcome)
-                "#contacts" (div "Hi!")))
+      (case-tpl reroute
+                "welcome" (do-welcome)
+                "contacts" (div "Hi!")
+                (div "Application Error!")))
 
     (login/login-div)))

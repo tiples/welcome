@@ -134,7 +134,6 @@
                               @capabilities)
         session (->session client-id name user-capabilities)
         select-common-data (select-keys @common-data user-capabilities)]
-    (println :select-capabilities select-capabilities)
     (swap! by-client-id assoc client-id session)
     (swap! by-name assoc name session)
     (tiples/chsk-send! client-id

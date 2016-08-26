@@ -19,13 +19,12 @@
     (div
       :css {:display "none"}
       :toggle login/show-app?
-      (form
-        (a :href "/#home" "Home")
-        " | "
-        (a :href "/#contact" "Contact us")
-        " | "
-        :submit #(login/logout!)
-        (button :type "submit" "log off"))
+      (table (tr
+               (for-tpl [capability login/capabilities]
+                        (td (a :href (cell= (str "/#" (name capability))) (cell= (name capability))) " | "))
+               (td (form
+                     :submit #(login/logout!)
+                     (button :type "submit" "log off")))))
       (h2 (text "Hello ~{(:full-name (:welcome login/user-data))}."))
       )
     (login/login-div)))

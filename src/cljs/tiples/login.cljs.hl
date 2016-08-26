@@ -35,8 +35,7 @@
                (dosync
                  (reset! capabilities (?data 0))
                  (reset! common-data (?data 1))
-                 (reset! user-data (?data 2))
-                 )))
+                 (reset! user-data (?data 2)))))
 
 (defn login-div []
       (div

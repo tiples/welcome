@@ -4,6 +4,21 @@
         [tiples.core :as tiples]
         [tiples.login :as login]))
 
+(defc= capability-names (reduce
+                         (fn [v i]
+                             (conj v (name i)))
+                         []
+                         login/capabilities))
+(def route (route-cell))
+
+(defn redo-route [cn r]
+      (let [r (if r
+                (subs r 1)
+                "")]
+           (if (some (fn [x] (= x r)) cn)
+             r
+             (if (empty? cn) nil (cn 0)))))
+(defc= reroute (redo-route capability-names route))
 (defn opening
       []
       (reset! login/started true))
@@ -24,8 +39,11 @@
       :css {:display "none"}
       :toggle login/show-app?
       (table (tr
-               (for-tpl [capability login/capabilities]
-                        (td (a :href (cell= (str "/#" (name capability))) (cell= (name capability))) " | "))
+               (for-tpl [capability capability-names]
+                        (td (if-tpl (cell= (= capability reroute))
+                                    (strong capability)
+                                    (a :href (cell= (str "/#" capability)) capability))
+                            " | "))
                (td (form
                      :submit #(login/logout!)
                      (button :type "submit" "log off")))))

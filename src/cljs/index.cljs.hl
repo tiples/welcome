@@ -69,7 +69,8 @@
                (td (form
                      :submit #(login/logout!)
                      (button :type "submit" "log off")))))
-      (div (for-tpl [d dispatch]
+      (div (@dispatch 0) (@dispatch 1))
+      #_(div (for-tpl [d dispatch]
                d)))
 
     (login/login-div)))

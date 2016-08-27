@@ -1,4 +1,4 @@
-(ns tiples.core
+(ns tiples.client
   (:require
    [taoensso.sente  :as sente]
    ))

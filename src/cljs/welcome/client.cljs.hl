@@ -1,0 +1,11 @@
+(ns welcome.client
+  (:require
+    [tiples.login :as login]))
+
+(def do-welcome
+  (div
+    :css {:display "none"}
+    :toggle (cell= (= login/reroute "welcome"))
+    (h2 (text "Hello ~{(:full-name (:welcome login/user-data))}."))))
+
+(login/add-element do-welcome)

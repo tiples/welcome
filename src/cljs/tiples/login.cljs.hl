@@ -1,7 +1,7 @@
 (ns tiples.login
   (:require-macros
     [javelin.core :refer [defc defc=]])
-  (:require [tiples.core :as tiples]))
+  (:require [tiples.client :as tiples]))
 
 (def elements (atom []))
 (defn add-element [element] (swap! elements conj element))

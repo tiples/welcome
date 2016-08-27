@@ -1,25 +1,16 @@
 (page "index.html"
       (:require
         [clojure.string :as string]
-        [tiples.core :as tiples]
+        [tiples.client :as tiples]
         [tiples.login :as login]
-        [contacts.client :as contacts]))
+        [welcome.client]
+        [contacts.client]))
 
 (defn opening
       []
       (reset! login/started true))
 
 (tiples/on-open opening)
-
-(def do-welcome
-      (div
-        :css {:display "none"}
-        :toggle (cell= (= login/reroute "welcome"))
-        (h2 (text "Hello ~{(:full-name (:welcome login/user-data))}."))))
-
-(login/add-element do-welcome)
-
-
 
 (tiples/start!)
 

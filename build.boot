@@ -25,7 +25,7 @@
                   [org.clojure/core.async    "0.2.385"]
                   [com.taoensso/sente        "1.10.0"]
                   ]
-  :source-paths   #{"src/clj" "src/cljs"}
+  :source-paths   #{"src"}
   :resource-paths #{"assets"})
 
 (require

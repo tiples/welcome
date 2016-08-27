@@ -35,7 +35,7 @@
 
 (defn get-client-user
   [client-id]
-  (let [session (by-client-id client-id)]
+  (let [session (@by-client-id client-id)]
     (if session
       (get-user (:name session))
       nil)))
@@ -54,15 +54,16 @@
 
 (defn get-client-data
   [capability client-id]
-  (let [client-data (get-client-user client-id)]
-    (if client-data
-      (client-data capability)
+  (let [client (get-client-user client-id)]
+    (if client
+      (let [user-data (:user-data client)]
+        (get user-data capability))
       nil)))
 
 (defn swap-client-data!
   [capability client-id f]
   (try
-    (let [session (by-client-id client-id)]
+    (let [session (@by-client-id client-id)]
       (if session
         (let [name (:name session)]
           (swap! users

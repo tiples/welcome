@@ -41,7 +41,7 @@
   []
   (comp
     (serve
-      :handler 'welcome.core/handler
+      :handler 'demo/handler
       :reload true
       :port 8000
       :httpkit true

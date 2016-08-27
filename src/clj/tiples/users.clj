@@ -1,5 +1,5 @@
 (ns tiples.users
-  (:require [tiples.core :as tiples]))
+  (:require [tiples.server :as tiples]))
 
 (def capabilities (atom []))
 

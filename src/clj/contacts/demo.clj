@@ -1,5 +1,5 @@
 (ns contacts.demo
-  (:require [contacts.core :as contacts]))
+  (:require [contacts.server :as contacts]))
 
 (contacts/add-contact! {:first "Ben" :last "Bitdiddle" :email "benb@mit.edu"})
 (contacts/add-contact! {:first "Alyssa" :middle-initial "P" :last "Hacker" :email "aphacker@mit.edu"})

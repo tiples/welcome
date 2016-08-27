@@ -1,6 +1,6 @@
-(ns contacts.core
+(ns contacts.server
   (:require [tiples.users :as users]
-            [tiples.core :as tiples]))
+            [tiples.server :as tiples]))
 
 (users/add-capability :contacts)
 

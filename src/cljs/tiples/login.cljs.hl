@@ -9,6 +9,22 @@
 (defc user-data nil)
 (defc user-name "")
 (def error (cell false))
+(def route (route-cell))
+
+(defc= capability-names (reduce
+                          (fn [v i]
+                              (conj v (name i)))
+                          []
+                          capabilities))
+
+(defn redo-route [cn r]
+      (let [r (if r
+                (subs r 1)
+                "")]
+           (if (some (fn [x] (= x r)) cn)
+             r
+             (if (empty? cn) nil (cn 0)))))
+(defc= reroute (redo-route capability-names route))
 
 (defc= show-login? (and started (not user-data)))
 (defc= show-app? (and started user-data))

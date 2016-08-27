@@ -4,8 +4,7 @@
             [ring.middleware.defaults :as d]
             [ring.util.response :as response]
             [taoensso.sente     :as sente]
-            [taoensso.sente.server-adapters.http-kit :refer (sente-web-server-adapter)]
-            ))
+            [taoensso.sente.server-adapters.http-kit :refer (sente-web-server-adapter)]))
 
 ;;;; Server-side setup
 

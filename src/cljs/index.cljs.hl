@@ -4,21 +4,6 @@
         [tiples.core :as tiples]
         [tiples.login :as login]))
 
-(defc= capability-names (reduce
-                         (fn [v i]
-                             (conj v (name i)))
-                         []
-                         login/capabilities))
-(def route (route-cell))
-
-(defn redo-route [cn r]
-      (let [r (if r
-                (subs r 1)
-                "")]
-           (if (some (fn [x] (= x r)) cn)
-             r
-             (if (empty? cn) nil (cn 0)))))
-(defc= reroute (redo-route capability-names route))
 (defn opening
       []
       (reset! login/started true))
@@ -26,13 +11,13 @@
 (def do-welcome
       (div
         :css {:display "none"}
-        :toggle (cell= (= reroute "welcome"))
+        :toggle (cell= (= login/reroute "welcome"))
         (h2 (text "Hello ~{(:full-name (:welcome login/user-data))}."))))
 
 (def do-contacts
       (div
         :css (:display "none")
-        :toggle (cell= (= reroute "contacts"))
+        :toggle (cell= (= login/reroute "contacts"))
         "hi!"))
 
 (def dispatch (atom []))
@@ -60,8 +45,8 @@
       :css {:display "none"}
       :toggle login/show-app?
       (table (tr
-               (for-tpl [capability capability-names]
-                        (td (if-tpl (cell= (= capability reroute))
+               (for-tpl [capability login/capability-names]
+                        (td (if-tpl (cell= (= capability login/reroute))
                                     (strong capability)
                                     (a :href (cell= (str "/#" capability)) capability))
                             " | "))

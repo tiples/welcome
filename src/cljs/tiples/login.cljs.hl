@@ -3,6 +3,9 @@
     [javelin.core :refer [defc defc=]])
   (:require [tiples.core :as tiples]))
 
+(def elements (atom []))
+(defn add-element [element] (swap! elements conj element))
+
 (defc started false)
 (defc capabilities nil)
 (defc common-data nil)

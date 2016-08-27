@@ -20,16 +20,8 @@
         :toggle (cell= (= login/reroute "contacts"))
         "hi!"))
 
-(def dispatch (atom []))
-
-(defn add-welcome []
-      (swap! dispatch conj do-welcome))
-(defn add-contacts []
-      (swap! dispatch conj do-contacts))
-
-
-(add-welcome)
-(add-contacts)
+(login/add-element do-welcome)
+(login/add-element do-contacts)
 
 
 
@@ -53,6 +45,6 @@
                (td (form
                      :submit #(login/logout!)
                      (button :type "submit" "log off")))))
-      (div @dispatch))
+      (div @login/elements))
 
     (login/login-div)))

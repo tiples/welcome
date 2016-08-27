@@ -2,6 +2,8 @@
   (:require [tiples.users :as users]
             [tiples.core :as tiples]))
 
+(users/add-capability :contacts)
+
 (defn add-contact!
   [contact]
   (swap! users/common-data

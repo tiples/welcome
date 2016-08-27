@@ -1,0 +1,11 @@
+(ns contacts.client
+  (:require
+    [tiples.login :as login]))
+
+(def do-contacts
+  (div
+    :css (:display "none")
+    :toggle (cell= (= login/reroute "contacts"))
+    "hi!"))
+
+(login/add-element do-contacts)

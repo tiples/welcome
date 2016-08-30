@@ -4,6 +4,7 @@
         [tiples.client :as tiples]
         [tiples.login :as login]
         [welcome.client]
+        [profile.client]
         [contacts.client]))
 
 (defn opening

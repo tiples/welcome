@@ -1,0 +1,11 @@
+(ns profile.client
+  (:require
+    [tiples.login :as login]))
+
+(def do-profile
+  (div
+    :css (:display "none")
+    :toggle (cell= (= login/reroute "profile"))
+    (h2 "Profile")))
+
+(login/add-element do-profile)

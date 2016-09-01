@@ -1,5 +1,5 @@
 # tiples/welcome
-A composable application for Clojure Tiples.
+A composable multi-tab web page built on websockets and Hoplon.
 
 The welcome program will let you login as either Sam or Fred and then displays "Welcome {Sam|Fred}".
 You can then select the tab/capability of interest: welcome, profile or contacts.

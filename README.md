@@ -1,5 +1,5 @@
 # tiples/welcome
-A composable multi-tab webapp built on websockets and Hoplon.
+A composable multi-tab webapp built on websockets and [Hoplon](https://github.com/hoplon/hoplon#readme).
 
 The welcome program will let you login as either Sam or Fred and then displays "Welcome {Sam|Fred}".
 You can then select the tab/capability of interest: welcome, profile or contacts.

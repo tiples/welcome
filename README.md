@@ -9,8 +9,9 @@ Hoplon uses [Javelin](https://github.com/hoplon/javelin) and provides a spreadsh
 makes it easy to trigger changes to the view when either the user generates an event or when a message is
 received from the server.
 
-The welcome program will let you login as Sam, Fred or Kris and then displays "Welcome {Sam|Fred|Kris}"
-along with a number of tabs.
+This program shows how to compose a webapp. There are 3 views: welcome, profile and contacts.
+The Welcome program will let you login as Sam, Fred or Kris and then displays "Welcome *user-name*"
+along with the welcome, profile and contacts tabs.
 Access control on the server determines which tabs are available for each user.
 Sam and Fred have access to the welcome, profile and contacts tabs, while Kris can only access
 the welcome and profile tabs.

@@ -3,9 +3,12 @@
     [javelin.core :refer [defc defc=]])
   (:require [tiples.client :as tiples]))
 
+(def processed-elements (atom []))
 (def elements (atom []))
-(defn add-element [element]
-      (swap! elements conj element))
+(defn add-element [kw element]
+      (when (not-any? kw @processed-elements)
+            (swap! processed-elements conj kw)
+            (swap! elements conj element)))
 
 (defc started false)
 (defc capabilities nil)

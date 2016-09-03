@@ -62,34 +62,23 @@
 
 (defn swap-client-data!
   [capability client-id f]
-  (println 11)
   (try
-    (println 12)
     (let [session (@by-client-id client-id)]
-      (println 13 session)
       (if session
         (let [name (:name session)]
-          (println 14 name)
           (swap! users
                  (fn [us]
                    (let [user (@users name)
-                         _ (println 22 user)
                          user-data (if user
                                            (get user :user-data)
                                            (throw (Exception. "no such user")))
-                         _ (println 0 user-data)
                          capability-data (get user-data capability)
-                         _ (println 1 capability-data)
                          capability-data (if (not (nil? capability-data))
                                            (f capability-data)
                                            (throw (Exception. "unauthorized capability")))
-                         _ (println 2 capability-data)
                          user-data (assoc user-data capability capability-data)
-                         _ (println 3 user-data)
                          user (assoc user :user-data user-data)
-                         _ (println 4 user)
                          us (assoc us name user)]
-                     (println 5 us)
                      us)))
           true)
         (throw (Exception. "no session"))))

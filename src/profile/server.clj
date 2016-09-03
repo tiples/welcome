@@ -11,7 +11,4 @@
     (users/swap-client-data! :profile
                              client-id
                              (fn [old-cd]
-                               (println ::capability-data old-cd)
-                               (println ?data)
-                               ?data))
-    (println @users/users)))
+                               ?data))))

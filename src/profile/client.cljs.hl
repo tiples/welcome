@@ -1,11 +1,17 @@
 (ns profile.client
   (:require
+    [tiples.client :as tiples]
     [tiples.login :as login]))
 
-(defc= my-profile
-       (if login/user-data
-         (:profile login/user-data)
-         nil))
+(defc my-profile nil)
+
+(defn watch-user-data [k r o n]
+      (reset! my-profile
+              (if n
+                (:profile n)
+                nil)))
+
+(add-watch login/user-data :profie watch-user-data)
 
 (defc= my-phone
        (if my-profile
@@ -19,9 +25,12 @@
          nil)
        (partial swap! my-profile assoc :email))
 
-(defn update-user-data []
-      (.log js/console "ribit")
-      (swap! login/user-data :profile @my-profile))
+(defn submit-user-data []
+      (swap! login/user-data assoc :profile @my-profile)
+      (tiples/chsk-send! [:profile/update @my-profile]))
+
+(defn reset-user-data []
+      (reset! my-profile (:profile @login/user-data)))
 
 (def do-profile
   (div
@@ -29,7 +38,7 @@
     :toggle (cell= (= login/reroute "profile"))
     (h2 "Profile")
     (form
-      :submit #(update-user-data)
+      :submit #(submit-user-data)
       (table
         (tr
           (td (label "Phone "))
@@ -42,10 +51,10 @@
                      :value my-email
                      :change #(reset! my-email @%))))
         (tr
-          (td "")
-          (td :style "text-align:right" (button :type "submit" "update"))
+          (td (button :type "submit" "submit"))
+          (td :style "text-align:right" (button :click #(reset-user-data) "reset"))
           )
         )
       )))
 
-(login/add-element do-profile)
+(login/add-element :profile do-profile)

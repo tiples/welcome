@@ -11,7 +11,7 @@
                 (:profile n)
                 nil)))
 
-(add-watch login/user-data :profie watch-user-data)
+(add-watch login/user-data :profile watch-user-data)
 
 (defc= my-phone
        (if my-profile
@@ -32,6 +32,9 @@
 (defn reset-user-data []
       (reset! my-profile (:profile @login/user-data)))
 
+(defn disabled? []
+      (cell= (= my-profile (:profile login/user-data))))
+
 (def do-profile
   (div
     :css (:display "none")
@@ -44,15 +47,19 @@
           (td (label "Phone "))
           (td (input :type "text"
                      :value my-phone
-                     :change #(reset! my-phone @%))))
+                     :keyup #(reset! my-phone @%))))
         (tr
           (td (label "Email "))
           (td (input :type "text"
                      :value my-email
-                     :change #(reset! my-email @%))))
+                     :keyup #(reset! my-email @%))))
         (tr
-          (td (button :type "submit" "submit"))
-          (td :style "text-align:right" (button :click #(reset-user-data) "reset"))
+          (td (button :type "submit"
+                      :disabled (disabled?)
+                      "submit"))
+          (td :style "text-align:right" (button :click #(reset-user-data)
+                                                :disabled (disabled?)
+                                                "reset"))
           )
         )
       )))

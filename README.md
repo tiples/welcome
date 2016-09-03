@@ -1,7 +1,9 @@
 # tiples/welcome
 A composable multi-tab webapp built on websockets and [Hoplon](https://github.com/hoplon/hoplon#readme).
 Websockets make social applications like chat reasonably simple to implement, but they are also helpful
-when you need to update the data being viewed by a user. But why use Hoplon?
+when you need to update the data being viewed by a user. 
+[(more)](http://www.infoworld.com/article/2609720/application-development/9-killer-uses-for-websockets.html)
+But why use Hoplon?
 
 Hoplon is a system for generating all the DOM elements you will need and then updating them as your data changes.
 For the Welcome program, Hoplon generates all the views but the only visible view is the one the user has selected.

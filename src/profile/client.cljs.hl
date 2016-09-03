@@ -2,10 +2,50 @@
   (:require
     [tiples.login :as login]))
 
+(defc= my-profile
+       (if login/user-data
+         (:profile login/user-data)
+         nil))
+
+(defc= my-phone
+       (if my-profile
+         (get my-profile :phone "")
+         nil)
+       (partial swap! my-profile assoc :phone))
+
+(defc= my-email
+       (if my-profile
+         (get my-profile :email "")
+         nil)
+       (partial swap! my-profile assoc :email))
+
+(defn update-user-data []
+      (.log js/console "ribit")
+      (swap! login/user-data :profile @my-profile))
+
 (def do-profile
   (div
     :css (:display "none")
     :toggle (cell= (= login/reroute "profile"))
-    (h2 "Profile")))
+    (h2 "Profile")
+    (form
+      :submit #(update-user-data)
+      (table
+        (tr
+          (td (label "Phone "))
+          (td (input :type "text"
+                     :value my-phone
+                     :change #(reset! my-phone @%))))
+        (tr
+          (td (label "Email "))
+          (td (input :type "text"
+                     :value my-email
+                     :change #(reset! my-email @%))))
+        (tr
+          (td "")
+          (td :style "text-align:right" (button :type "submit" "update"))
+          )
+        )
+      )))
 
 (login/add-element do-profile)

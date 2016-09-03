@@ -18,7 +18,8 @@
         contact (:contact ?data)]
     (when (users/get-client-data :contacts client-id)
       (when (users/swap-common-data! :contacts
-                                   (fn [contacts] (disj contacts contact))
+                                   (fn [contacts]
+                                     (disj contacts contact))
                                    #{})
         (users/broadcast! :contacts/deleted contact)))))
 

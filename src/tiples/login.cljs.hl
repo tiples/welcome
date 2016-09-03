@@ -4,7 +4,8 @@
   (:require [tiples.client :as tiples]))
 
 (def elements (atom []))
-(defn add-element [element] (swap! elements conj element))
+(defn add-element [element]
+      (swap! elements conj element))
 
 (defc started false)
 (defc capabilities nil)

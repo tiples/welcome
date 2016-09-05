@@ -35,6 +35,6 @@
                     (div
                       :css {:display "none"}
                       :toggle (cell= (= login/reroute (name capability)))
-                      (cell= (login/add-element capability))))))
+                      (login/add-element @capability)))))
 
     (login/login-div)))

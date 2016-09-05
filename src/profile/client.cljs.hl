@@ -37,8 +37,6 @@
 
 (def do-profile
   (div
-    :css (:display "none")
-    :toggle (cell= (= login/reroute "profile"))
     (h2 "Profile")
     (form
       :submit #(submit-user-data)

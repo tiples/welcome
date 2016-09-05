@@ -66,8 +66,6 @@
 
 (def do-contacts
   (div
-    :css (:display "none")
-    :toggle (cell= (= login/reroute "contacts"))
     (h2 "Contact list")
     (ul (contact-list :from my-contacts :sorted-by :last))
     (contact-input :to add-contact "Add contact")

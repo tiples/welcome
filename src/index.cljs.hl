@@ -31,6 +31,6 @@
                (td (form
                      :submit #(login/logout!)
                      (button :type "submit" "log off")))))
-      (div @login/elements))
+      (div (for-tpl [capability login/capabilities] (login/add-element @capability))))
 
     (login/login-div)))

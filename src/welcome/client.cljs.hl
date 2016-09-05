@@ -8,4 +8,4 @@
     :toggle (cell= (= login/reroute "welcome"))
     (h2 (text "Hello ~{(:full-name (:welcome login/user-data))}."))))
 
-(login/add-element :welcome do-welcome)
+(defmethod login/add-element :welcome [_] (do-welcome))

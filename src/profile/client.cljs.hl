@@ -64,4 +64,4 @@
         )
       )))
 
-(login/add-element :profile do-profile)
+(defmethod login/add-element :profile [_] (do-profile))

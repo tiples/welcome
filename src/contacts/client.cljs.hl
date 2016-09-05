@@ -75,4 +75,4 @@
     (p (em "Note: The Add contact button is disabled until you enter a valid contact.  A valid contact consists of two or three whitespace-delimited names."))
     (a :href "https://github.com/tailrecursion/hoplon-demos/tree/master/contacts" "Source code on Github")))
 
-(login/add-element :contacts do-contacts)
+(defmethod login/add-element :contacts [_] (do-contacts))

@@ -36,8 +36,8 @@
 
 (defelem contact-list [{:keys [from sorted-by] :or {sorted-by identity}}]
          (loop-tpl :bindings [contact (cell= (sort-by sorted-by from))]
-                   (li (span (cell= (display-name contact)))
-                       (button :click #(delete-contact @contact) "Delete"))))
+                   (tr (td (cell= (display-name contact)))
+                       (td (button :click #(delete-contact @contact) "Delete")))))
 
 (defn parse-contact [contact-str]
       (let [[first middle last :as parts] (string/split contact-str #"\s+")
@@ -67,10 +67,9 @@
 (def do-contacts
   (div
     (h2 "Contact list")
-    (ul (contact-list :from my-contacts :sorted-by :last))
+    (table (contact-list :from my-contacts :sorted-by :last))
     (contact-input :to add-contact "Add contact")
     (hr)
-    (p (em "Note: The Add contact button is disabled until you enter a valid contact.  A valid contact consists of two or three whitespace-delimited names."))
-    (a :href "https://github.com/tailrecursion/hoplon-demos/tree/master/contacts" "Source code on Github")))
+    (p (em "Note: The Add contact button is disabled until you enter a valid contact.  A valid contact consists of two or three whitespace-delimited names."))))
 
 (defmethod login/add-element :contacts [_] (do-contacts))

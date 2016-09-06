@@ -24,6 +24,7 @@
                   [ring/ring-defaults        "0.2.1"]
                   [org.clojure/core.async    "0.2.385"]
                   [com.taoensso/sente        "1.10.0"]
+                  [com.rpl/specter           "0.13.0"]
                   ]
   :source-paths   #{"src"}
   :resource-paths #{"assets"})

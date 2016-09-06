@@ -1,5 +1,6 @@
 (ns tiples.users
-  (:require [tiples.server :as tiples]))
+  (:require [tiples.server :as tiples]
+            [com.rpl.specter :as s]))
 
 (def capabilities (atom []))
 
@@ -60,29 +61,32 @@
         (get user-data capability))
       nil)))
 
+(defn valid-user-data?
+  [capability name]
+  (let [user (@users name)
+        user-data (if user
+                    (get user :user-data)
+                    nil)]
+    (if user-data
+      (if (get user-data capability)
+        true
+        false)
+      false)))
+
+(defn swap-user-data!
+  [capability name f]
+  (if (valid-user-data? capability name)
+    (do
+      (swap! users (fn [us] (s/transform [(s/keypath name) :user-data capability] f us)))
+      true)
+    false))
+
 (defn swap-client-data!
   [capability client-id f]
-  (try
     (let [session (@by-client-id client-id)]
       (if session
-        (let [name (:name session)]
-          (swap! users
-                 (fn [us]
-                   (let [user (@users name)
-                         user-data (if user
-                                           (get user :user-data)
-                                           (throw (Exception. "no such user")))
-                         capability-data (get user-data capability)
-                         capability-data (if (not (nil? capability-data))
-                                           (f capability-data)
-                                           (throw (Exception. "unauthorized capability")))
-                         user-data (assoc user-data capability capability-data)
-                         user (assoc user :user-data user-data)
-                         us (assoc us name user)]
-                     us)))
-          true)
-        (throw (Exception. "no session"))))
-    (catch Exception e false)))
+        (swap-user-data! capability (:name session) f)
+        false)))
 
 (defn broadcast! [msg-id data]
   (let [uids (keys @by-client-id)
